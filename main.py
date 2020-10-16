@@ -16,10 +16,10 @@ def tokenize(input):
     filtered = filter(lambda tok: tok not in stopwords.words('english'), tokens)
     return " ".join(filtered)
 
-file = open("writingPrompts.txt").read()
+file = open("D:\\Datasets\\writingPrompts\\test.wp_target").read()
 processed = tokenize(file)
 
-chars = sorted(list(set(processed_inputs)))
+chars = sorted(list(set(processed)))
 char_num = dict((c, i) for i, c in enumerate(chars)) # Convert chars in numbers
 
 input_len = len(processed)
@@ -44,7 +44,7 @@ for i in range(0, input_len - seq_len, 1):
    
 print ("Total Patterns:", len(x_data))
 
-X = numpy.reshape(x_data, (n_patterns, seq_len, 1))
+X = numpy.reshape(x_data, (len(x_data), seq_len, 1))
 X = X/float(vocab_len) #Convert into floats
 
 y = np_utils.to_categorical(y_data) # Convert the label data
