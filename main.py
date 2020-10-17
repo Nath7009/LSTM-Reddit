@@ -10,15 +10,17 @@ from nltk.corpus import stopwords
 def tokenize(input):
     input = input.lower() # To reduce possible characters
     tokenizer = RegexpTokenizer(r'\w+')
+    print("Tokenizing...")
     tokens = tokenizer.tokenize(input)
-
+    print("Input tokenized ", len(tokens), " found")
     # Remove all tokens containing stopwords
     filtered = filter(lambda tok: tok not in stopwords.words('english'), tokens)
+    print("Tokens filtered")
     return " ".join(filtered)
 
-file = open("D:\\Datasets\\writingPrompts\\test.wp_target").read()
-processed = tokenize(file)
-
+file = open("wp_1.txt", encoding="utf-8").read()
+#processed = tokenize(file)
+processed = file
 chars = sorted(list(set(processed)))
 char_num = dict((c, i) for i, c in enumerate(chars)) # Convert chars in numbers
 
@@ -33,7 +35,7 @@ x_data = []
 y_data = []
 
 
-for i in range(0, input_len - seq_len, 1):
+for i in range(0, int(input_len/20) - seq_len, 1):
     #Convert every char into numbers
     in_seq = processed[i:i + seq_len]
     out_seq = processed[i + seq_len]
@@ -52,8 +54,6 @@ y = np_utils.to_categorical(y_data) # Convert the label data
 #Model cration
 model = Sequential()
 model.add(LSTM(256, input_shape=(X.shape[1], X.shape[2]), return_sequences=True))
-model.add(Dropout(0.2))
-model.add(LSTM(256, return_sequences=True))
 model.add(Dropout(0.2))
 model.add(LSTM(128))
 model.add(Dropout(0.2))
