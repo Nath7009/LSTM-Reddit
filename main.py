@@ -1,6 +1,7 @@
 import sys
 import os.path
 import numpy
+from networkSize import get_network_size
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras.layers import Dense, Dropout, LSTM
 from keras.models import Sequential, load_model
@@ -39,7 +40,7 @@ x_data = []
 y_data = []
 
 
-for i in range(0, input_len - seq_len, 1):
+for i in range(0, input_len//2 - seq_len, 1):
     #Convert every char into numbers
     in_seq = processed[i:i + seq_len]
     out_seq = processed[i + seq_len]
@@ -71,7 +72,8 @@ else:
     
     model.compile(loss='categorical_crossentropy', optimizer='adam')
 
-
+model.summary()
+print(get_network_size(256, model))
 checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
 desired_call = [checkpoint] #Saves time for second execution
 tensorboard_callback = TensorBoard(
@@ -79,7 +81,7 @@ tensorboard_callback = TensorBoard(
     write_grads=False, write_images=False, embeddings_freq=0,
     embeddings_layer_names=None, embeddings_metadata=None,
     embeddings_data=None, update_freq='epoch')
-model.fit(X, y, epochs=20, batch_size=256, callbacks=[desired_call, tensorboard_callback]) #Train the model
+model.fit(X, y, epochs=20, batch_size=256, callbacks=[desired_call]) #Train the model
 
 model.load_weights(filepath)
 model.compile(loss='categorical_crossentropy', optimizer='adam')
