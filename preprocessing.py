@@ -25,7 +25,7 @@ file = open("D:\\Datasets\\writingPrompts\\test.wp_target", encoding="utf-8").re
 file = file.lower()
 file = re.sub('[^0-9a-zA-Z:,.!? ]+', '', file)
 #file = tokenize(file)
-files = 10
+files = 20
 for i in range(1,files):
     print(i)
     start = int((i-1) * len(file) / files)
